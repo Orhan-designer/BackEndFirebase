@@ -9,7 +9,7 @@ const {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } = require("firebase/auth");
-const e = require("express");
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyB-D7arV4svUwuAPZvZBHnvfbVaf3fH5LM",
@@ -37,17 +37,22 @@ exports.signUp = (req, res) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      set(ref(database, "users/" + user.uid), {
-        email: email,
-        password: password,
-        token: `Bearer ${token}`,
-      });
+      set(
+        ref(database, "users/" + user.uid),
+        {
+          email: email,
+          password: password,
+          token: `Bearer ${token}`,
+        },
+        res.send({ token: token, user: email })
+      );
       // res.send(200).json({ token: token, user: { email, password } });
       console.log("User created");
     })
     .catch((error) => {
-      // res.send(400).json({ message: error });
-      console.log(error);
+      res.send({
+        message: error,
+      });
     });
 };
 
@@ -56,21 +61,36 @@ exports.signIn = (req, res) => {
   const email = req.body.email;
   // const password = bcrypt.compare(req.body.password);
   const password = new Buffer(req.body.password).toString("base64");
-  if (password) {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        const dt = new Date();
+  const token = jwt.sign(
+    {
+      email: email,
+    },
+    "supersecret",
+    {
+      expiresIn: 120 * 120,
+    }
+  );
 
-        update(ref(database, "users/" + user.uid), {
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      const dt = new Date();
+
+      update(
+        ref(database, "users/" + user.uid),
+        {
           email: email,
           password: password,
+          token: token,
           last_login: dt,
-        });
-        console.log("User logged in!");
-      })
-      .catch((error) => {
-        console.log(error);
+        },
+        res.send({ token: token, user: email })
+      );
+      console.log("User logged in!");
+    })
+    .catch((error) => {
+      res.send({
+        message: error,
       });
-  }
+    });
 };
