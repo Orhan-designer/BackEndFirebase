@@ -1,7 +1,9 @@
 "use strict";
 
 //get
-exports.getSensors = (req, res) => {};
+exports.getSensors = (req, res) => {
+    
+};
 
 //post
 exports.createSensors = (req, res) => {};
