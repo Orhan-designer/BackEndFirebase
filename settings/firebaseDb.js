@@ -37,15 +37,12 @@ exports.signUp = (req, res) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      set(
-        ref(database, "users/" + user.uid),
-        {
-          email: email,
-          password: password,
-          token: `Bearer ${token}`,
-        },
-        res.send({ token: token, user: email })
-      );
+      set(ref(database, "users/" + user.uid), {
+        email: email,
+        password: password,
+        token: `Bearer ${token}`,
+      });
+      res.send({ token: token, user: email });
       // res.send(200).json({ token: token, user: { email, password } });
       console.log("User created");
     })
@@ -86,6 +83,7 @@ exports.signIn = (req, res) => {
         },
         res.send({ token: token, user: email })
       );
+
       console.log("User logged in!");
     })
     .catch((error) => {
