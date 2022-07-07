@@ -12,7 +12,7 @@ exports.getFarms = (req, res) => {
   });
 };
 
-exports.createFarm = (req, res) => {
+exports.createFarms = (req, res) => {
   const farms =
     "INSERT INTO `farm` (`Farm_Name`) VALUES('" + req.body.name + "')";
 
@@ -24,3 +24,27 @@ exports.createFarm = (req, res) => {
     }
   });
 };
+
+exports.updateFarms = (req, res) => {
+  const farms = "UPDATE `farm` SET `Farm_Name` = '" + req.body.name + "' WHERE `ID` = '" + req.body.id + "'";
+
+  db.query(farms, (error, results) => {
+    if (error) {
+      res.send({ message: error });
+    } else {
+      res.send({ result: results });
+    }
+  })
+}
+
+exports.deleteFarms = (req, res) => {
+  const farms = "DELETE FROM `farm` WHERE `ID` = '" + req.body.id + "'";
+
+  db.query(farms, (error, results) => {
+    if (error) {
+      res.send({ message: error })
+    } else {
+      res.send({ result: results })
+    }
+  })
+}

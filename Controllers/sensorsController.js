@@ -4,7 +4,7 @@ const db = require("./../settings/mySqlDb");
 //get
 exports.getSensors = (req, res) => {
   const sensors =
-    "SELECT `ID`, `Coops_ID`, `Position`, `Device_ID`, `Type` FROM `sensors`";
+    "SELECT `ID`, `Coops_ID`, `Position`, `Device_ID`, `Type` FROM `sensors` WHERE `Coops_ID` = '" + req.params.id + "'";
 
   db.query(sensors, (error, results) => {
     if (error) {
@@ -16,10 +16,10 @@ exports.getSensors = (req, res) => {
 };
 
 //post
-exports.createSensors = (req, res) => {
+exports.createDeviceId = (req, res) => {
+  console.log(req)
   const sensors =
-    "INSERT INTO `sensors`(`Coops_ID`, `Position`, `Device_ID`, `Type`) VALUES('" +
-    +"')";
+    "UPDATE `sensors` SET `Device_ID` = '" + req.body.deviceId + "' WHERE `ID` = '" + req.body.id + "'";
 
   db.query(sensors, (error, results) => {
     if (error) {
@@ -31,7 +31,7 @@ exports.createSensors = (req, res) => {
 };
 
 //put
-exports.updateSensors = (req, res) => {};
+exports.updateSensors = (req, res) => { };
 
 //delete
-exports.deleteSensors = (req, res) => {};
+exports.deleteSensors = (req, res) => { };
