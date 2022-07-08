@@ -14,7 +14,7 @@ exports.getFarms = (req, res) => {
 
 exports.createFarms = (req, res) => {
   const farms =
-    "INSERT INTO `farm` (`Farm_Name`) VALUES('" + req.body.name + "')";
+    "INSERT INTO `farm`(`Farm_Name`) VALUES('" + req.body.name + "')";
 
   db.query(farms, (error, results) => {
     if (error) {

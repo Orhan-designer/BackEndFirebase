@@ -1,11 +1,10 @@
 "use strict";
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
 const { initializeApp } = require("firebase/app");
 const { getDatabase, set, ref, update } = require("firebase/database");
 const { getAuth } = require("firebase/auth");
-const { FirebaseScrypt } = require("firebase-scrypt");
 
 const {
   createUserWithEmailAndPassword,
@@ -30,22 +29,22 @@ const auth = getAuth();
 
 exports.signUp = (req, res) => {
   const email = req.body.email;
-  // const salt = bcrypt.genSaltSync(15);
-  const password = new Buffer(req.body.password).toString("base64");
-  // const password = bcrypt.hashSync(req.body.password, salt);
+  const password = req.body.password;
+
   const payload = { subject: email };
   const token = jwt.sign(payload, "secretKey");
 
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
+      const password = userCredential.user.reloadUserInfo.passwordHash;
+
       set(ref(database, "users/" + user.uid), {
         email: email,
         password: password,
         token: `Bearer ${token}`,
       });
-      res.send({ token: token, user: email });
-      console.log("User created");
+      res.send({ token: token, user: { email, password } });
     })
     .catch((error) => {
       res.send({
@@ -55,41 +54,44 @@ exports.signUp = (req, res) => {
 };
 
 exports.signIn = (req, res) => {
-  console.log(req.body);
   const email = req.body.email;
-  // const password = bcrypt.compare(req.body.password);
-  const password = new Buffer(req.body.password).compare("base64");
-  const token = jwt.sign(
-    {
-      email: email,
-    },
-    "supersecret",
-    {
-      expiresIn: 120 * 120,
-    }
-  );
+  const password = req.body.password;
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      const dt = new Date();
+  if (password) {
+    const token = jwt.sign(
+      {
+        email: email,
+      },
+      "supersecret",
+      {
+        expiresIn: 120 * 120,
+      }
+    );
+    console.log('auth, email, password')
+    console.log(auth, email, password)
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // console.log(auth, email, password)
+        const user = userCredential.user;
+        const password = userCredential.user.reloadUserInfo.passwordHash;
+        const dt = new Date();
 
-      update(
-        ref(database, "users/" + user.uid),
-        {
-          email: email,
-          password: password,
-          token: token,
-          last_login: dt,
-        },
-        res.send({ token: token, user: email })
-      );
-
-      console.log("User logged in!");
-    })
-    .catch((error) => {
-      res.send({
-        message: error,
+        update(
+          ref(database, "users/" + user.uid),
+          {
+            email: email,
+            password: password,
+            token: token,
+            last_login: dt,
+          });
+        res.send({ token: token, user: { email: email, password: password } })
+      })
+      .catch((error) => {
+        res.send({
+          message: error,
+        });
       });
-    });
+  }
+
+
 };
