@@ -5,6 +5,7 @@ module.exports = (app) => {
   const farm = require("./../Controllers/farmController");
   const coops = require("./../Controllers/coopsController");
   const sensors = require("./../Controllers/sensorsController");
+  const influx = require('../Controllers/influxGetRequest')
 
   app.route("/api/auth/signup").post(user.signUp);
   app.route("/api/auth/signin").post(user.signIn);
@@ -21,4 +22,7 @@ module.exports = (app) => {
 
   app.route("/api/sensors/:id").get(sensors.getSensors);
   app.route("/api/create-deviceId/:id").put(sensors.createDeviceId);
+
+  app.route("/api/get-from-mySql").get(influx.getDataFromMySql);
+  // app.route("/api/get-from-coops").get(influx.getDataFromCoops);
 };

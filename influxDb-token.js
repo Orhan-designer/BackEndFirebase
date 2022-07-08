@@ -1,0 +1,3 @@
+const INFLUXDB_TOKEN = 'ibjhBkT7UL1Nd5jKLf_-YbfFHnjYiTDKTuJldz31qdWFZEH92Dc8Q-E3DaXenEqYAm3i29jZnk3D3G595B4c2Q=='
+
+module.exports = INFLUXDB_TOKEN;

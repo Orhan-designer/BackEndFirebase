@@ -43,7 +43,6 @@ exports.signUp = (req, res) => {
         token: `Bearer ${token}`,
       });
       res.send({ token: token, user: email });
-      // res.send(200).json({ token: token, user: { email, password } });
       console.log("User created");
     })
     .catch((error) => {

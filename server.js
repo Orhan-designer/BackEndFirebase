@@ -5,7 +5,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const port = process.env.PORT || 3500;
-const connection = require('./settings/mySqlDb')
+const connection = require('./settings/mySqlDb');
 
 app.use(cors());
 

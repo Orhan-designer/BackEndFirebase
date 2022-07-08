@@ -58,12 +58,22 @@ exports.updateCoops = (req, res) => {
 
 exports.deleteCoops = (req, res) => {
     const coops =
-        "DELETE FROM `coops` WHERE `ID` = '" + req.params.id + "'"
+        "DELETE FROM `coops` WHERE `ID` = '" + req.params.id + "'";
 
     db.query(coops, (error, results) => {
         if (error) {
             console.log(error);
         } else {
+            console.log(req.params)
+            const sensors = "DELETE FROM `sensors` WHERE `ID` = '" + req.params.id + "'";
+
+            db.query(sensors, (error, sensorsDeleteResult) => {
+                if (error) {
+                    res.send({ message: error })
+                } else {
+                    res.send({ result: sensorsDeleteResult })
+                }
+            })
             res.send({ result: results });
         }
     });
