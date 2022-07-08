@@ -17,7 +17,6 @@ exports.getSensors = (req, res) => {
 
 //post
 exports.createDeviceId = (req, res) => {
-  console.log(req)
   const sensors =
     "UPDATE `sensors` SET `Device_ID` = '" + req.body.deviceId + "' WHERE `ID` = '" + req.body.id + "'";
 

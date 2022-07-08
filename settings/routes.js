@@ -17,6 +17,7 @@ module.exports = (app) => {
   app.route("/api/coops/:id").get(coops.getCoops);
   app.route("/api/create-coops").post(coops.createCoops);
   app.route("/api/update-coops/:id").put(coops.updateCoops);
+  app.route("/api/delete-coops/:id").delete(coops.deleteCoops);
 
   app.route("/api/sensors/:id").get(sensors.getSensors);
   app.route("/api/create-deviceId/:id").put(sensors.createDeviceId);

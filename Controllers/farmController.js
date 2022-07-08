@@ -38,7 +38,7 @@ exports.updateFarms = (req, res) => {
 }
 
 exports.deleteFarms = (req, res) => {
-  const farms = "DELETE FROM `farm` WHERE `ID` = '" + req.body.id + "'";
+  const farms = "DELETE FROM `farm` WHERE `ID` = '" + req.params.id + "'";
 
   db.query(farms, (error, results) => {
     if (error) {

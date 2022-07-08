@@ -24,7 +24,6 @@ exports.createCoops = (req, res) => {
         if (error) {
             res.send({ message: error });
         } else {
-
             let resultsForSensors = {}
 
             for (let i = 1; i < 7; i++) {
@@ -39,18 +38,27 @@ exports.createCoops = (req, res) => {
                     }
                 })
             }
-
             res.send(resultsForSensors)
-
         }
     });
 };
 
 exports.updateCoops = (req, res) => {
-    console.log(req)
-    const coopId = req.body.ID;
     const coops =
         "UPDATE `coops` SET `Name` = '" + req.body.Name + "' WHERE `ID` = '" + req.body.ID + "'"
+
+    db.query(coops, (error, results) => {
+        if (error) {
+            console.log(error);
+        } else {
+            res.send({ result: results });
+        }
+    });
+};
+
+exports.deleteCoops = (req, res) => {
+    const coops =
+        "DELETE FROM `coops` WHERE `ID` = '" + req.params.id + "'"
 
     db.query(coops, (error, results) => {
         if (error) {
