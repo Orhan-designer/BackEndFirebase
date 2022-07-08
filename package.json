@@ -24,6 +24,7 @@
     "cors": "^2.8.5",
     "firebase": "^9.8.4",
     "firebase-admin": "^11.0.0",
+    "firebase-scrypt": "^2.2.0",
     "firebase-tools": "^11.2.0"
   }
 }

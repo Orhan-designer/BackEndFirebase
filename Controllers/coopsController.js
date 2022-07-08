@@ -64,7 +64,6 @@ exports.deleteCoops = (req, res) => {
         if (error) {
             console.log(error);
         } else {
-            console.log(req.params)
             const sensors = "DELETE FROM `sensors` WHERE `ID` = '" + req.params.id + "'";
 
             db.query(sensors, (error, sensorsDeleteResult) => {
@@ -74,7 +73,6 @@ exports.deleteCoops = (req, res) => {
                     res.send({ result: sensorsDeleteResult })
                 }
             })
-            res.send({ result: results });
         }
     });
 };

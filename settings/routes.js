@@ -24,5 +24,4 @@ module.exports = (app) => {
   app.route("/api/create-deviceId/:id").put(sensors.createDeviceId);
 
   app.route("/api/get-from-mySql").get(influx.getDataFromMySql);
-  // app.route("/api/get-from-coops").get(influx.getDataFromCoops);
 };

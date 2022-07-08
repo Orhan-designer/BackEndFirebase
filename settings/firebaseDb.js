@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const { initializeApp } = require("firebase/app");
 const { getDatabase, set, ref, update } = require("firebase/database");
 const { getAuth } = require("firebase/auth");
+const { FirebaseScrypt } = require("firebase-scrypt");
+
 const {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -56,7 +58,7 @@ exports.signIn = (req, res) => {
   console.log(req.body);
   const email = req.body.email;
   // const password = bcrypt.compare(req.body.password);
-  const password = new Buffer(req.body.password).toString("base64");
+  const password = new Buffer(req.body.password).compare("base64");
   const token = jwt.sign(
     {
       email: email,
