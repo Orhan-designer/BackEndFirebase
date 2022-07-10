@@ -49,7 +49,17 @@ exports.deleteFarms = (req, res) => {
     if (error) {
       res.status(400).send({ message: error });
     } else {
-      res.status(200).send({ user: results });
+      const sensors =
+        "DELETE FROM `coops` WHERE `Farm_ID` = '" + req.params.id + "'";
+
+      db.query(sensors, (error, sensorsDeleteResult) => {
+        if (error) {
+          res.status(400).send({ message: error });
+        } else {
+          res.status(200).send({ result: sensorsDeleteResult });
+        }
+      });
+      // res.status(200).send({ user: results });
     }
   });
 };
