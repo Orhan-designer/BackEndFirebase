@@ -1,5 +1,5 @@
 "use strict";
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const { initializeApp } = require("firebase/app");
@@ -67,24 +67,22 @@ exports.signIn = (req, res) => {
         expiresIn: 120 * 120,
       }
     );
-    console.log('auth, email, password')
-    console.log(auth, email, password)
+
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // console.log(auth, email, password)
         const user = userCredential.user;
         const password = userCredential.user.reloadUserInfo.passwordHash;
         const dt = new Date();
 
-        update(
-          ref(database, "users/" + user.uid),
-          {
-            email: email,
-            password: password,
-            token: token,
-            last_login: dt,
-          });
-        res.send({ token: token, user: { email: email, password: password } })
+        update(ref(database, "users/" + user.uid), {
+          email: email,
+          password: password,
+          token: token,
+          last_login: dt,
+        });
+        res
+          .status(200)
+          .send({ token: token, user: { email: email, password: password } });
       })
       .catch((error) => {
         res.send({
@@ -92,6 +90,4 @@ exports.signIn = (req, res) => {
         });
       });
   }
-
-
 };

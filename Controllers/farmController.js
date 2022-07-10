@@ -5,9 +5,9 @@ exports.getFarms = (req, res) => {
 
   db.query(farms, (error, results) => {
     if (error) {
-      console.log(error);
+      res.status(400).send({ message: error });
     } else {
-      res.send({ user: results });
+      res.status(200).send({ user: results });
     }
   });
 };
@@ -18,33 +18,38 @@ exports.createFarms = (req, res) => {
 
   db.query(farms, (error, results) => {
     if (error) {
-      console.log(error);
+      res.status(400).send({ message: error });
     } else {
-      res.send({ user: results });
+      res.status(200).send({ user: results });
     }
   });
 };
 
 exports.updateFarms = (req, res) => {
-  const farms = "UPDATE `farm` SET `Farm_Name` = '" + req.body.name + "' WHERE `ID` = '" + req.body.id + "'";
+  const farms =
+    "UPDATE `farm` SET `Farm_Name` = '" +
+    req.body.name +
+    "' WHERE `ID` = '" +
+    req.body.id +
+    "'";
 
   db.query(farms, (error, results) => {
     if (error) {
-      res.send({ message: error });
+      res.status(400).send({ message: error });
     } else {
-      res.send({ result: results });
+      res.status(200).send({ user: results });
     }
-  })
-}
+  });
+};
 
 exports.deleteFarms = (req, res) => {
   const farms = "DELETE FROM `farm` WHERE `ID` = '" + req.params.id + "'";
 
   db.query(farms, (error, results) => {
     if (error) {
-      res.send({ message: error })
+      res.status(400).send({ message: error });
     } else {
-      res.send({ result: results })
+      res.status(200).send({ user: results });
     }
-  })
-}
+  });
+};
