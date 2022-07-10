@@ -79,7 +79,7 @@ exports.deleteCoops = (req, res) => {
       res.status(400).send({ message: error });
     } else {
       const sensors =
-        "DELETE FROM `sensors` WHERE `ID` = '" + req.params.id + "'";
+        "DELETE FROM `sensors` WHERE `Coops_ID` = '" + req.params.id + "'";
 
       db.query(sensors, (error, sensorsDeleteResult) => {
         if (error) {
