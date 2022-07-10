@@ -41,14 +41,13 @@ exports.signUp = (req, res) => {
 
       set(ref(database, "users/" + user.uid), {
         email: email,
-        password: password,
-        token: `Bearer ${token}`,
       });
-      res.send({ token: token, user: { email, password } });
+      res.status(200).send({ token: token, user: { email, password } });
     })
     .catch((error) => {
-      res.send({
-        message: error,
+      res.status(400).send({
+        message: "Cannot register user",
+        error,
       });
     });
 };
@@ -76,8 +75,6 @@ exports.signIn = (req, res) => {
 
         update(ref(database, "users/" + user.uid), {
           email: email,
-          password: password,
-          token: token,
           last_login: dt,
         });
         res
@@ -85,8 +82,9 @@ exports.signIn = (req, res) => {
           .send({ token: token, user: { email: email, password: password } });
       })
       .catch((error) => {
-        res.send({
-          message: error,
+        res.status(400).send({
+          message: "User already exist",
+          error,
         });
       });
   }

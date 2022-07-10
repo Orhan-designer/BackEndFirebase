@@ -10,9 +10,9 @@ exports.getSensors = (req, res) => {
 
   db.query(sensors, (error, results) => {
     if (error) {
-      res.send({ message: error });
+      res.status(400).send({ message: error });
     } else {
-      res.send({ result: results });
+      res.status(200).send({ result: results });
     }
   });
 };
