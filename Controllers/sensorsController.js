@@ -19,13 +19,11 @@ exports.getSensors = (req, res) => {
 
 //post
 exports.createDeviceId = (req, res) => {
-  console.log(req.body)
 
   const sensorsSelect =
     "SELECT `ID`, `Coops_ID`, `Position`, `Device_ID`, `Type` FROM `sensors` WHERE `Device_ID` = '" +
     req.body.deviceId +
     "'";
-  console.log(sensorsSelect)
 
   db.query(sensorsSelect, (error, sensorsResults) => {
     if (sensorsResults.length) {
@@ -38,7 +36,6 @@ exports.createDeviceId = (req, res) => {
         "' WHERE `Coops_ID` = '" +
         req.body.id +
         "'";
-      console.log('sensors', sensors)
 
       db.query(sensors, (error, results) => {
         if (error) {
