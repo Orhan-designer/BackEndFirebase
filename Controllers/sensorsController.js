@@ -30,6 +30,7 @@ exports.createDeviceId = async (req, res) => {
     res.status(400).send({ result: 'Some names are duplicates' });
     return;
   }
+  
   let results = [];
   let promises = [];
   for (let i = 0; i < req.body.length; i++) {

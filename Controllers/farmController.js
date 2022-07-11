@@ -43,19 +43,16 @@ exports.updateFarms = (req, res) => {
 };
 
 exports.deleteFarms = (req, res) => {
-  const farms = "DELETE FROM `farm`, `coops`, `sensors` USING `farm`,`coops`, `sensors` WHERE farm.ID = '" +
+  const farms =
+    "DELETE FROM `farm`, `coops`, `sensors` USING `farm`, `coops`, `sensors` WHERE farm.ID = '" +
     req.params.id +
-    "' AND '" +
-    req.params.id +
-    "' = coops.Farm_ID AND coops.ID = sensors.Coops_ID";
+    "' AND farm.ID = coops.Farm_ID AND coops.ID = sensors.Coops_ID";
 
-  db.query(farms, (error, results) => {
+  db.query(farms, (error, farmResult) => {
     if (error) {
       res.status(400).send({ message: error });
     } else {
-
-      res.status(200).send({ result: results });
+      res.status(200).send({ result: farmResult });
     }
   });
-}
-
+};
