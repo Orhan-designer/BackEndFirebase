@@ -5,7 +5,7 @@ const db = require("./../settings/mySqlDb");
 exports.getValidDeviceId = (req, res) => {
     const sensorsSelect =
         "SELECT `ID`, `Coops_ID`, `Position`, `Device_ID`, `Type` FROM `sensors` WHERE `Device_ID` = '" +
-        req.body.deviceId +
+        req.params.deviceId +
         "'";
 
     db.query(sensorsSelect, (error, sensorsResults) => {
