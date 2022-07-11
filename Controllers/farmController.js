@@ -47,7 +47,7 @@ exports.deleteFarms = (req, res) => {
     req.params.id +
     "' AND '" +
     req.params.id +
-    "' = coops.Farm_ID AND coops.ID = sensors.Coops_ID";;
+    "' = coops.Farm_ID AND coops.ID = sensors.Coops_ID";
 
   db.query(farms, (error, results) => {
     if (error) {

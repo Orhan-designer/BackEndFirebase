@@ -28,7 +28,6 @@ exports.createDeviceId = (req, res) => {
     if (sensorsResults.length) {
       res.status(400).send({ message: error || 'That device id name already used.' });
     } else {
-
       for (let i = 1; i < sensorsResults.length; i++) {
         const sensors =
           "UPDATE `sensors` SET `Device_ID` = '" +
@@ -44,9 +43,9 @@ exports.createDeviceId = (req, res) => {
               .send({ message: error });
           } else {
             sensorsResults[i] = results;
-            res.status(200).send({ result: results });
           }
         });
+        res.status(200).send({ result: sensorsResults });
       }
     }
   });

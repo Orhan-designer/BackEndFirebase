@@ -23,7 +23,7 @@ module.exports = (app) => {
 
   app.route("/api/sensors/:id").get(sensors.getSensors);
   app.route('/api/sensors-is-valid').get(sensorsValidation.getValidDeviceId)
-  app.route("/api/create-deviceId/:id").put(sensors.createDeviceId);
+  app.route("/api/create-deviceId").put(sensors.createDeviceId);
 
   app.route("/api/postData-to-influxDb").post(influx.getDataFromMySql);
 };
