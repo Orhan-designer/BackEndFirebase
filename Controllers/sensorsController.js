@@ -12,18 +12,27 @@ exports.getSensors = (req, res) => {
     if (error) {
       res.status(400).send({ message: error });
     } else {
+      results = results.map(x => {
+        return {
+          ...x,
+          Device_ID: x.Device_ID ? x.Device_ID : ''
+        }
+      })
+      console.log(results)
       res.status(200).send({ result: results });
     }
   });
 };
 
 //post
-exports.createDeviceId = (req, res) => {
-  console.log(req.body)
-
+exports.createDeviceId = async (req, res) => {
+  if ((new Set(req.body.map(x => x.Device_ID))).size !== req.body.length) {
+    res.status(400).send({ result: 'Some names are duplicates' });
+    return;
+  }
   let results = [];
+  let promises = [];
   for (let i = 0; i < req.body.length; i++) {
-
     const sensors =
       "UPDATE `sensors` SET `Device_ID` = '" +
       req.body[i].Device_ID +
@@ -31,13 +40,15 @@ exports.createDeviceId = (req, res) => {
       req.body[i].ID +
       "'";
 
-    db.query(sensors, (error, sensorsResults) => {
-      if (sensorsResults.length) {
-        res.status(400).send({ message: error || 'That device id name already used.' });
-      } else {
-        results.push(sensorsResults)
-      }
-    });
+    promises.push(new Promise((resolve) => {
+      db.query(sensors, (error, sensorsResult) => {
+        results.push(sensorsResult)
+        resolve(1);
+      });
+    }))
+
   }
+  await Promise.all(promises);
   res.status(200).send({ result: results })
+  //res.status(400).send({ message: error || 'That device id name already used.' });
 };
