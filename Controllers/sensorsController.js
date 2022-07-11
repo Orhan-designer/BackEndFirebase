@@ -26,7 +26,7 @@ exports.createDeviceId = (req, res) => {
 
   db.query(sensorsSelect, (error, sensorsResults) => {
     if (sensorsResults.length) {
-      res.status(400).send({ message: error });
+      res.status(400).send({ message: error || 'That device id name already used.' });
     } else {
       const sensors =
         "UPDATE `sensors` SET `Device_ID` = '" +

@@ -1,7 +1,7 @@
 "use strict";
 
 const db = require("../settings/mySqlDb");
-const clientInflux = require("./../settings/influxDb");
+const clientInflux = require("../settings/influxDb");
 const { Point } = require("@influxdata/influxdb-client");
 
 const tagsParams = {
@@ -44,8 +44,8 @@ const tagsParams = {
   },
 };
 
-let org = `just.hanmamedov@gmail.com`;
-let bucket = `ChikenHouse`;
+let org = `orhanm@asist-lab.com`;
+let bucket = `Salus`;
 
 exports.getDataFromMySql = (req, res) => {
   const coops =
