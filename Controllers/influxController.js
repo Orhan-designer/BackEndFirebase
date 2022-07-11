@@ -44,7 +44,7 @@ const tagsParams = {
   },
 };
 
-let org = `orhanm@asist-lab.com`;
+let org = `alex@ar-sw.com`;
 let bucket = `Salus`;
 
 exports.getDataFromMySql = (req, res) => {

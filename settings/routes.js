@@ -25,5 +25,5 @@ module.exports = (app) => {
   app.route('/api/sensors-is-valid').get(sensorsValidation.getValidDeviceId)
   app.route("/api/create-deviceId/:id").put(sensors.createDeviceId);
 
-  app.route("/api/get-from-mySql").post(influx.getDataFromMySql);
+  app.route("/api/postData-to-influxDb").post(influx.getDataFromMySql);
 };

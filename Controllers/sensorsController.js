@@ -28,22 +28,26 @@ exports.createDeviceId = (req, res) => {
     if (sensorsResults.length) {
       res.status(400).send({ message: error || 'That device id name already used.' });
     } else {
-      const sensors =
-        "UPDATE `sensors` SET `Device_ID` = '" +
-        req.body.deviceId +
-        "' WHERE `ID` = '" +
-        req.body.id +
-        "'";
 
-      db.query(sensors, (error, results) => {
-        if (error) {
-          res
-            .status(400)
-            .send({ message: "That device id name already used", error });
-        } else {
-          res.status(200).send({ result: results });
-        }
-      });
+      for (let i = 1; i < sensorsResults.length; i++) {
+        const sensors =
+          "UPDATE `sensors` SET `Device_ID` = '" +
+          sensorsResults[i].Device_ID +
+          "' WHERE `Coops_ID` = '" +
+          req.body.id +
+          "'";
+
+        db.query(sensors, (error, results) => {
+          if (error) {
+            res
+              .status(400)
+              .send({ message: error });
+          } else {
+            sensorsResults[i] = results;
+            res.status(200).send({ result: results });
+          }
+        });
+      }
     }
   });
 };

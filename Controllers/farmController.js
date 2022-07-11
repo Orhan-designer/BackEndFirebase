@@ -43,31 +43,19 @@ exports.updateFarms = (req, res) => {
 };
 
 exports.deleteFarms = (req, res) => {
-  const farms = "DELETE FROM `farm` WHERE `ID` = '" + req.params.id + "'";
+  const farms = "DELETE FROM `farm`, `coops`, `sensors` USING `farm`,`coops`, `sensors` WHERE farm.ID = '" +
+    req.params.id +
+    "' AND '" +
+    req.params.id +
+    "' = coops.Farm_ID AND coops.ID = sensors.Coops_ID";;
 
   db.query(farms, (error, results) => {
     if (error) {
       res.status(400).send({ message: error });
     } else {
-      const sensors =
-        "DELETE FROM `coops` WHERE `Farm_ID` = '" + req.params.id + "'";
 
-      db.query(sensors, (error, sensorsDeleteResult) => {
-        if (error) {
-          res.status(400).send({ message: error });
-        } else {
-          const sensors =
-            "DELETE FROM `sensors` WHERE `Coops_ID` = '" + req.params.id + "'";
-
-          db.query(sensors, (error, sensorsDeleteResult) => {
-            if (error) {
-              res.status(400).send({ message: error });
-            } else {
-              res.status(200).send({ result: sensorsDeleteResult });
-            }
-          });
-        }
-      });
+      res.status(200).send({ result: results });
     }
   });
-};
+}
+

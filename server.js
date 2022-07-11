@@ -20,9 +20,13 @@ connection.connect((error) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.get('/', function (req, res) {
+  res.send('Hello Guy!')
+});
+
 const route = require("./settings/routes");
 route(app);
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`App listening on port ${port}`);
 });
