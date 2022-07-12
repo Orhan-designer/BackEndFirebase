@@ -55,7 +55,7 @@ exports.deleteFarms = (req, res) => {
 
       db.query(coops, (error, results) => {
         if (error) {
-          res.status(400).send({ message: 'Cannot delete the coops', error })
+          res.status(400).send({ message: 'Cannot delete tables', error })
         } else {
           const sensors = "DELETE FROM `sensors` WHERE `Coops_ID` = '" + req.params.id + "'";
 

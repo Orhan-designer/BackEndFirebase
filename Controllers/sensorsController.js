@@ -18,7 +18,6 @@ exports.getSensors = (req, res) => {
           Device_ID: x.Device_ID ? x.Device_ID : ''
         }
       })
-      console.log(results)
       res.status(200).send({ result: results });
     }
   });
@@ -26,13 +25,21 @@ exports.getSensors = (req, res) => {
 
 //post
 exports.createDeviceId = async (req, res) => {
-  if ((new Set(req.body.map(x => x.Device_ID))).size !== req.body.length) {
-    res.status(400).send({ result: 'Some names are duplicates' });
-    return;
+  if (req.body.length) {
+    if ((new Set(req.body.map(x => x.Device_ID))).size !== req.body.length) {
+      res.status(400).send({ result: 'Some names are duplicates or empty' });
+      return;
+    }
   }
-  
+
+  // if ((new Set(req.body.map(x => x.Device_ID))).size !== req.body.length) {
+  //   res.status(400).send({ result: 'Some names are duplicates or empty' });
+  //   return;
+  // }
+
   let results = [];
   let promises = [];
+
   for (let i = 0; i < req.body.length; i++) {
     const sensors =
       "UPDATE `sensors` SET `Device_ID` = '" +

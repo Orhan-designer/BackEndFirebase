@@ -28,8 +28,6 @@ exports.createCoops = (req, res) => {
         if (error) {
             res.status(400).send({ message: error });
         } else {
-            let resultsForSensors = {};
-
             for (let i = 1; i < 7; i++) {
                 const sensors =
                     "INSERT INTO `sensors`(`Coops_ID`, `position`, `Type`) VALUES('" +
@@ -42,14 +40,13 @@ exports.createCoops = (req, res) => {
 
                 db.query(sensors, (error, sensorResult) => {
                     if (error) {
-                        // res.status(400).send({ message: error });
-                        console.log(error);
+                        res.status(400).send({ message: 'Cannot create a coop', error });
                     } else {
                         results[i] = sensorResult;
                     }
                 });
             }
-            res.status(200).send({ result: resultsForSensors });
+            res.status(200).send({ result: results });
         }
     });
 };
