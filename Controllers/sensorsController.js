@@ -26,8 +26,10 @@ exports.getSensors = (req, res) => {
 //post
 exports.createDeviceId = async (req, res) => {
   if (req.body.length) {
-    if ((new Set(req.body.map(x => x.Device_ID))).size !== req.body.length) {
-      res.status(400).send({ result: 'Some names are duplicates or empty' });
+    let filteredIds = req.body.filter(el => el.Device_ID)
+    console.log(req.body)
+    if ((new Set(filteredIds.map(x => x.Device_ID))).size !== filteredIds.length) {
+      res.status(400).send({ result: 'Some names are duplicates' });
       return;
     }
   }
