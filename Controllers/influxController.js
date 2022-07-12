@@ -48,6 +48,24 @@ let org = `alex@ar-sw.com`;
 let bucket = `Salus`;
 
 exports.getDataFromMySql = (req, res) => {
+  //   let queryClient = clientInflux.getQueryApi(org)
+  //   let fluxQuery = `from(bucket: "Salus")
+  //  |> range(start: -3d)
+  //  |> filter(fn: (r) => r._measurement == "farm first3")`
+
+  //   queryClient.queryRows(fluxQuery, {
+  //     next: (row, tableMeta) => {
+  //       const tableObject = tableMeta.toObject(row)
+  //       console.log(tableObject)
+  //     },
+  //     error: (error) => {
+  //       console.error('\nError', error)
+  //     },
+  //     complete: () => {
+  //       console.log('\nSuccess')
+  //     },
+  //   })
+
   const coops =
     "SELECT farm.ID as `farmId`, `Farm_Name`, coops.ID as `coopsId`, `Name`, `position`, `Device_ID` FROM `farm`, `coops`, `sensors` WHERE farm.ID = '" +
     req.body.id +
@@ -59,17 +77,21 @@ exports.getDataFromMySql = (req, res) => {
     if (error) {
       res.status(400).send({ message: error });
     } else {
+      console.log(org, bucket)
       let writeClient = clientInflux.getWriteApi(org, bucket, "ns");
 
       results.forEach((item) => {
+        console.log(item)
         let point = new Point(item.Farm_Name + item.farmId)
           .tag("software_version", "FW_rev_1_2_3")
-          .tag('"device_id', "123232,")
+          .tag("device_id", "123232")
           .tag("mq137_r0", "13.137")
           .tag("mq136_r0", "13.136")
           .tag("mq135_r0", "13.135")
-          .tag("CoopNameId", item.Name + item.coopsId)
-          .tag("FarmNameId", item.Farm_Name + item.farmId)
+          .tag("CoopName", item.Name)
+          .tag('CoopId', item.coopsId)
+          .tag("Farm_Name", item.Farm_Name)
+          .tag('Farm_Id', item.farmId)
           .tag("position", item.position)
           .tag("DeviceId", item.Device_ID)
           .intField("temperature", 25)
@@ -84,6 +106,7 @@ exports.getDataFromMySql = (req, res) => {
           .intField("nh3_ppm", 13.136)
           .intField("co2_ppm", 13.135);
         writeClient.writePoint(point);
+        writeClient.flush()
       });
 
       res.status(200).send({ result: results });
