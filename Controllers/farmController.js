@@ -44,15 +44,30 @@ exports.updateFarms = (req, res) => {
 
 exports.deleteFarms = (req, res) => {
   const farms =
-    "DELETE FROM `farm`, `coops`, `sensors` USING `farm`, `coops`, `sensors` WHERE farm.ID = '" +
-    req.params.id +
-    "' AND farm.ID = coops.Farm_ID AND coops.ID = sensors.Coops_ID";
+    "DELETE FROM `farm` WHERE `ID` = '" + req.params.id + "'";
 
   db.query(farms, (error, farmResult) => {
     if (error) {
       res.status(400).send({ message: error });
     } else {
-      res.status(200).send({ result: farmResult });
+
+      const coops = "DELETE FROM `coops` WHERE `Farm_ID` = '" + req.params.id + "'";
+
+      db.query(coops, (error, results) => {
+        if (error) {
+          res.status(400).send({ message: 'Cannot delete the coops', error })
+        } else {
+          const sensors = "DELETE FROM `sensors` WHERE `Coops_ID` = '" + req.params.id + "'";
+
+          db.query(sensors, (error, results) => {
+            if (error) {
+              res.status(400).send({ message: 'Cannot delete the sensors', error })
+            } else {
+              res.status(200).send({ result: 'Coops and sensors was deleted', results })
+            }
+          })
+        }
+      })
     }
   });
 };
